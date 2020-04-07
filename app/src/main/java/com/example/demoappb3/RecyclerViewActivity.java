@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,7 +20,10 @@ public class RecyclerViewActivity extends AppCompatActivity {
     private RecyclerView recyclerView = null;
 
     // Adapter :
-    private MemosAdapter memosAdapter = null;
+    private MemosAdapter memosAdapter;
+
+    private EditText editTextMemo;
+    private List<Memo> listMemos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +44,18 @@ public class RecyclerViewActivity extends AppCompatActivity {
             listMemos.add(new Memo(i, "Mémo N°" + Integer.toString(i)));
         }
         // adapter :
-        MemosAdapter memosAdapter = new MemosAdapter(listMemos, this);
+        memosAdapter = new MemosAdapter(listMemos, this);
         recyclerView.setAdapter(memosAdapter);
 
         Toast.makeText(this, "mon message : " + listMemos.size(), Toast.LENGTH_SHORT).show();
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void addMemo(View view) {
+
+        editTextMemo = findViewById(R.id.add_memo);
+        String insertedText = editTextMemo.getText().toString();
+        memosAdapter.addMemo(new Memo(40, insertedText));
+        editTextMemo.setText("");
     }
 }

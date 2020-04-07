@@ -42,6 +42,11 @@ public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHol
         return listMemos.size();
     }
 
+    public void addMemo(Memo memo) {
+        listMemos.add(listMemos.size(), memo);
+        notifyItemInserted(0);
+    }
+
     public class MemosViewHolder extends RecyclerView.ViewHolder
     {
         // TextView intitulé course :
@@ -65,6 +70,5 @@ public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHol
             });
 
         }
-
     }
 }

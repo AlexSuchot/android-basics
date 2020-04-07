@@ -5,8 +5,27 @@
     android:layout_height="wrap_content"
     tools:context=".RecyclerViewActivity">
 
+
+    <Button
+        android:id="@+id/add_memo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="308dp"
+        android:layout_marginLeft="308dp"
+        android:width="100dp"
+        android:text="Ajouter un mémo"
+        android:onClick="addMemo"
+        android:textColor="#FFF"
+        android:background="@color/colorPrimaryDark" />
+
+    <EditText
+        android:id="@+id/add_memo"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_memos"
+        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
          />
