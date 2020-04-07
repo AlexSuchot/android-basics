@@ -43,4 +43,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CountActivity.class);
         startActivity(intent);
     }
+
+    public void goToRecyclerView(View view) {
+        Intent intent = new Intent(this, RecyclerViewActivity.class);
+        startActivity(intent);
+    }
 }
