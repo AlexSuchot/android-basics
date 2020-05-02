@@ -1,15 +1,25 @@
 package com.example.demoappb3;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+import cz.msebera.android.httpclient.entity.mime.Header;
 
 public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHolder>
 {
@@ -33,7 +43,7 @@ public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHol
 
     @Override
     public void onBindViewHolder(MemosViewHolder holder, int position) {
-        holder.textViewLibelleMemo.setText(listMemos.get(position).message + position);
+        holder.textViewLibelleMemo.setText(listMemos.get(position).message + (position + 1));
     }
 
     @Override
@@ -62,10 +72,38 @@ public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHol
             textViewLibelleMemo.setOnClickListener(new View.OnClickListener()
             {
                 @Override
-                public void onClick(View view)
+                public void onClick(final View view)
                 {
-                    Memo memo = listMemos.get(getAdapterPosition());
-                    Toast.makeText(view.getContext(), "Mémo en position " + memo, Toast.LENGTH_SHORT).show();
+                    // client HTTP :
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    // paramètres :
+                    RequestParams requestParams = new RequestParams();
+                    final Memo memo = listMemos.get(getAdapterPosition());
+                    requestParams.put("1234", (memo.message + getAdapterPosition() + 1));
+                    // appel :
+                    client.post("http://httpbin.org/post", requestParams, new AsyncHttpResponseHandler()
+                    {
+
+                        @SuppressLint("ResourceType")
+                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                        @Override
+                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                            String retour = null;
+                            try {
+                                retour = new String(responseBody, "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                            Log.i("TAG", retour);
+
+                            Toast.makeText(view.getContext(), retour, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                            Log.e("TAG", error.toString());
+                        }
+                    });
                 }
             });
 
