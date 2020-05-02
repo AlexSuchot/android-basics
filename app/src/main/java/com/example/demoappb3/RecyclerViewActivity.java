@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,12 +38,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // contenu d'exemple :
-        List<Memo> listMemos = new ArrayList<>();
 
-        for (int i = 1; i < 16; i++) {
-            listMemos.add(new Memo(i, "Mémo N°" + Integer.toString(i)));
-        }
+        // Database :
+        MemoDatabaseHelper dbHelper = new MemoDatabaseHelper(getBaseContext(), null, null, 1);
+
+        MemoDAO memoDAO = new MemoDAO();
+        List<Memo> listMemos = memoDAO.getListMemo(this);
+
         // adapter :
         memosAdapter = new MemosAdapter(listMemos, this);
         recyclerView.setAdapter(memosAdapter);
@@ -55,7 +57,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         editTextMemo = findViewById(R.id.add_memo);
         String insertedText = editTextMemo.getText().toString();
-        memosAdapter.addMemo(new Memo(40, insertedText));
+        memosAdapter.addMemo(new Memo(insertedText));
         editTextMemo.setText("");
     }
 }

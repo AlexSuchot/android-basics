@@ -33,7 +33,7 @@ public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHol
 
     @Override
     public void onBindViewHolder(MemosViewHolder holder, int position) {
-        holder.textViewLibelleMemo.setText(listMemos.get(position).text);
+        holder.textViewLibelleMemo.setText(listMemos.get(position).message + position);
     }
 
     @Override
