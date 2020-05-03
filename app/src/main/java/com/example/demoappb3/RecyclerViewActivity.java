@@ -1,10 +1,13 @@
 package com.example.demoappb3;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,15 +52,30 @@ public class RecyclerViewActivity extends AppCompatActivity {
         memosAdapter = new MemosAdapter(listMemos, this);
         recyclerView.setAdapter(memosAdapter);
 
-        Toast.makeText(this, "mon message : " + listMemos.size(), Toast.LENGTH_SHORT).show();
+        if (savedInstanceState != null) {
+            savedInstanceState.putInt("memoNumber", 150);
+        }
     }
 
-    @SuppressLint("SetTextI18n")
     public void addMemo(View view) {
-
+        MemoDatabaseHelper memoDatabaseHelper = new MemoDatabaseHelper(this, null, null, 1);
+        SQLiteDatabase db = memoDatabaseHelper.getWritableDatabase();
         editTextMemo = findViewById(R.id.add_memo);
         String insertedText = editTextMemo.getText().toString();
         memosAdapter.addMemo(new Memo(insertedText));
         editTextMemo.setText("");
+
+        ContentValues values = new ContentValues();
+        values.put(BaseContrat.RessourcesContrat.COLONNE_MESSAGE, insertedText);
+        db.insert(BaseContrat.RessourcesContrat.TABLE_MEMOS, null, values);
+    }
+
+    @Override
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        int memoNumber = savedInstanceState.getInt("memoNumber");
+        Toast.makeText(this, "Le dernier mémo cliqué est le numéro : " + memoNumber, Toast.LENGTH_SHORT).show();
+
     }
 }

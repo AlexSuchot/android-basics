@@ -19,7 +19,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
-import cz.msebera.android.httpclient.entity.mime.Header;
 
 public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHolder>
 {
@@ -79,7 +78,7 @@ public class MemosAdapter extends RecyclerView.Adapter<MemosAdapter.MemosViewHol
                     // paramètres :
                     RequestParams requestParams = new RequestParams();
                     final Memo memo = listMemos.get(getAdapterPosition());
-                    requestParams.put("1234", (memo.message + getAdapterPosition() + 1));
+                    requestParams.put("1234", (memo.message + " " + (getAdapterPosition() + 1)));
                     // appel :
                     client.post("http://httpbin.org/post", requestParams, new AsyncHttpResponseHandler()
                     {
